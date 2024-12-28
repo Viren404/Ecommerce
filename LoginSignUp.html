@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login/Signup - Fastest Courier</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        /* Add custom CSS below */
+        body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(to bottom right, #0074D9, #0056b3);
+}
+
+.auth-section .bg-banner {
+    background: url('courier-banner.jpg') no-repeat center center/cover;
+    position: relative;
+}
+
+.auth-section .bg-banner:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* background: rgba(0, 0, 0, 0.5); */
+}
+
+.auth-section .bg-banner h2 {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.nav-pills .nav-link {
+    border-radius: 30px;
+    font-weight: bold;
+}
+
+.nav-pills .nav-link.active {
+    background: #0074D9;
+    color: white;
+}
+
+    </style>
+</head>
+
+<body>
+    <section class="auth-section d-flex align-items-center vh-100">
+        <div class="container d-flex justify-content-center">
+            <div class="row shadow-lg rounded overflow-hidden bg-white">
+                <!-- Banner Section -->
+                <div class="col-lg-6 d-none d-lg-block bg-banner">
+                    <div class="h-100 d-flex flex-column justify-content-center align-items-center text-white p-4">
+                        <img src="tracking_map.jpg" alt="Fastest Courier Logo" class="mb-4" width="150">
+                        <h2>Fast & Reliable</h2>
+                        <p>Experience unmatched speed and efficiency with our courier services. Your packages, delivered on time.</p>
+                    </div>
+                </div>
+
+                <!-- Form Section -->
+                <div class="col-lg-6 p-4">
+                    <div class="text-center mb-4">
+                        <img src="logo1.webp" alt="Fastest Courier Logo" width="100">
+                    </div>
+
+                    <ul class="nav nav-pills mb-4 justify-content-center" id="auth-tabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="login-tab" data-bs-toggle="pill" data-bs-target="#login" type="button" role="tab" aria-controls="login" aria-selected="true">
+                                Login
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="signup-tab" data-bs-toggle="pill" data-bs-target="#signup" type="button" role="tab" aria-controls="signup" aria-selected="false">
+                                Signup
+                            </button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content" id="auth-tabs-content">
+                        <!-- Login Form -->
+                        <div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="login-tab">
+                            <form id="loginForm">
+                                <div class="mb-3">
+                                    <label for="loginChoice" class="form-label">Login With</label>
+                                    <div class="d-flex">
+                                        <div class="form-check me-3">
+                                            <input type="radio" id="loginEmailRadio" name="loginChoice" class="form-check-input" value="email" checked onchange="toggleLoginFields()">
+                                            <label class="form-check-label" for="loginEmailRadio">Email</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="radio" id="loginPhoneRadio" name="loginChoice" class="form-check-input" value="phone" onchange="toggleLoginFields()">
+                                            <label class="form-check-label" for="loginPhoneRadio">Phone Number</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="emailLoginFields">
+                                    <div class="mb-3">
+                                        <label for="loginEmail" class="form-label">Email</label>
+                                        <input type="email" id="loginEmail" class="form-control" placeholder="Enter your email" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="loginPassword" class="form-label">Password</label>
+                                        <input type="password" id="loginPassword" class="form-control" placeholder="Enter your password" required>
+                                    </div>
+                                </div>
+                                <div id="phoneLoginFields" class="d-none">
+                                    <div class="mb-3">
+                                        <label for="loginPhone" class="form-label">Phone Number</label>
+                                        <input type="tel" id="loginPhone" class="form-control" placeholder="Enter your phone number" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="loginOTP" class="form-label">OTP</label>
+                                        <input type="text" id="loginOTP" class="form-control" placeholder="Enter OTP" required>
+                                    </div>
+                                    <button type="button" class="btn btn-secondary mb-3">Send OTP</button>
+                                </div>
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary">Login</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Signup Form -->
+                        <div class="tab-pane fade" id="signup" role="tabpanel" aria-labelledby="signup-tab">
+                            <form id="signupForm">
+                                <div class="mb-3">
+                                    <label for="signupName" class="form-label">Full Name</label>
+                                    <input type="text" id="signupName" class="form-control" placeholder="Enter your full name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="signupChoice" class="form-label">Signup With</label>
+                                    <div class="d-flex">
+                                        <div class="form-check me-3">
+                                            <input type="radio" id="signupEmailRadio" name="signupChoice" class="form-check-input" value="email" checked onchange="toggleSignupFields()">
+                                            <label class="form-check-label" for="signupEmailRadio">Email</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="radio" id="signupPhoneRadio" name="signupChoice" class="form-check-input" value="phone" onchange="toggleSignupFields()">
+                                            <label class="form-check-label" for="signupPhoneRadio">Phone Number</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="emailSignupFields">
+                                    <div class="mb-3">
+                                        <label for="signupEmail" class="form-label">Email</label>
+                                        <input type="email" id="signupEmail" class="form-control" placeholder="Enter your email" required>
+                                    </div>
+                                </div>
+                                <div id="phoneSignupFields" class="d-none">
+                                    <div class="mb-3">
+                                        <label for="signupPhone" class="form-label">Phone Number</label>
+                                        <input type="tel" id="signupPhone" class="form-control" placeholder="Enter your phone number" required>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="signupPassword" class="form-label">Password</label>
+                                    <input type="password" id="signupPassword" class="form-control" placeholder="Create a password" required>
+                                </div>
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-success">Signup</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleLoginFields() {
+            const choice = document.querySelector('input[name="loginChoice"]:checked').value;
+            document.getElementById('emailLoginFields').classList.toggle('d-none', choice !== 'email');
+            document.getElementById('phoneLoginFields').classList.toggle('d-none', choice !== 'phone');
+        }
+
+        function toggleSignupFields() {
+            const choice = document.querySelector('input[name="signupChoice"]:checked').value;
+            document.getElementById('emailSignupFields').classList.toggle('d-none', choice !== 'email');
+            document.getElementById('phoneSignupFields').classList.toggle('d-none', choice !== 'phone');
+        }
+    </script>
+</body>
+
+
+
+</html>

@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery Booking Page</title>
+    <style>
+        .delivery-options {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    gap: 20px;
+    padding: 0 15px;
+}
+
+.option {
+    background: linear-gradient(145deg, #f1f1f1, #d3d3d3);
+    border-radius: 12px;
+    padding: 20px;
+    width: 30%;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+    text-align: center;
+    text-transform: capitalize;
+    box-sizing: border-box;
+}
+
+.option h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #333;
+}
+
+.option p {
+    font-size: 14px;
+    margin: 5px 0;
+    color: #555;
+}
+
+.option strong {
+    color: #1e7e34;
+    font-size: 16px;
+}
+
+.option:hover {
+    transform: translateY(-5px);
+    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.2);
+}
+
+.option.active {
+    background: linear-gradient(145deg, #ffe4a1, #ffcc70);
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+.option.active h3 {
+    color: #3a3a3a;
+}
+
+.option.active strong {
+    color: #e06e3f;
+}
+
+          #autocomplete-container {
+            width: 100%;
+            max-width: 400px;
+            margin: 50px auto;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        .navbar {
+            background-color: #0078d7;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .navbar .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .navbar .logo img {
+            width: 50px;
+            height: 50px;
+        }
+        .navbar .logo span {
+            font-size: 1.6em;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        .navbar .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+        .navbar .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.1em;
+            transition: color 0.3s;
+            position: relative;
+        }
+        .navbar .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background-color: white;
+            bottom: -5px;
+            left: 0;
+            transform: scaleX(0);
+            transform-origin: bottom right;
+            transition: transform 0.3s ease-out;
+        }
+        .navbar .nav-links a:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+        .navbar .nav-links a:hover {
+            color: #cce7ff;
+        }
+        .navbar .nav-links a.active {
+            color: #cce7ff;
+            font-weight: bold;
+        }
+        .navbar .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            cursor: pointer;
+        }
+        .navbar .hamburger div {
+            width: 30px;
+            height: 4px;
+            background-color: white;
+            border-radius: 2px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 30px;
+            background: linear-gradient(to bottom, #ffffff, #eef2f7);
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #0078d7;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        .delivery-options {
+            display: flex;
+            justify-content: space-between;
+            margin: 30px 0;
+        }
+        .option {
+            flex: 1;
+            border: 2px solid transparent;
+            border-radius: 15px;
+            margin: 0 10px;
+            padding: 20px;
+            text-align: center;
+            background: #f8f9fc;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+        }
+        .option:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+            border-color: #0078d7;
+        }
+        .option.active {
+            border-color: #0078d7;
+            background: #e6f4ff;
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+        }
+        .weight-category, .hours-category {
+            margin: 30px 0;
+            text-align: center;
+        }
+        .weight-category h3, .hours-category h3 {
+            margin-bottom: 20px;
+            color: #444;
+            font-size: 1.5em;
+        }
+        .weight-category button, .hours-category button {
+            margin: 10px;
+            padding: 12px 25px;
+            border: 2px solid #ccc;
+            border-radius: 12px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        }
+        .weight-category button:hover, .hours-category button:hover {
+            background-color: #0078d7;
+            color: #fff;
+            border-color: #0078d7;
+        }
+        .form-section {
+            margin-top: 30px;
+        }
+        .form-section label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+        .form-section input, .form-section textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            transition: border-color 0.3s;
+            font-size: 1em;
+        }
+        .form-section input:focus, .form-section textarea:focus {
+            border-color: #0078d7;
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 120, 215, 0.3);
+        }
+        .form-section textarea {
+            resize: vertical;
+        }
+        .pricing {
+            margin-top: 40px;
+            padding: 30px;
+            background: #f1f7fc;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .pricing h3 {
+            margin: 0 0 15px;
+            font-size: 2em;
+            color: #0078d7;
+        }
+        .pricing p {
+            margin: 5px 0;
+            font-size: 1.2em;
+            color: #666;
+        }
+        .footer {
+            background-color: #0078d7;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            font-size: 0.9em;
+        }
+        .footer a {
+            color: #cce7ff;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Mobile view adjustments */
+        @media (max-width: 768px) {
+            .navbar .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                text-align: center;
+                background-color: #0078d7;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                padding: 20px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                z-index: 999;
+            }
+            .navbar .nav-links a {
+                margin: 10px 0;
+                font-size: 1.2em;
+            }
+            .navbar .hamburger {
+                display: flex;
+            }
+            .navbar.active .nav-links {
+                display: flex;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">
+            <img src="Content/AboutLogo.png" alt="Courier Logo">
+            <span>KourierX</span>
+        </div>
+        <div class="nav-links">
+            <a href="Home.html" class="active">Home</a>
+            <!-- <a href="#about-us">About Us</a>
+            <a href="#">Services</a> -->
+            <a href="Tracking.html">Track</a>
+            <!-- <a href="#">Contact</a> -->
+        </div>
+        <div class="hamburger" onclick="toggleNavbar()">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Book Your Delivery</h1>
+
+        <div class="delivery-options">
+            <div class="option active" onclick="selectOption(this)">
+                <h3>Deliver Now</h3>
+                <p>We will assign a nearby 2-Wheeler to pick up and deliver as soon as possible.</p>
+                <p><strong>from ₹45</strong></p>
+            </div>
+            <div class="option" onclick="selectOption(this)">
+                <h3>By End of Day</h3>
+                <p>Place your order by 4 PM and get it delivered by 9 PM.</p>
+                <p><strong>from ₹27</strong></p>
+            </div>
+            <div class="option" onclick="selectOption(this)">
+                <h3>Schedule</h3>
+                <p>A 2-Wheeler will arrive at scheduled times.</p>
+                <p><strong>from ₹45</strong></p>
+            </div>
+        </div>
+        
+
+        <div class="weight-category">
+            <h3>Select Weight</h3>
+            <button onclick="selectWeight(this)">Up to 1 kg</button>
+            <button onclick="selectWeight(this)">Up to 5 kg</button>
+            <button onclick="selectWeight(this)">Up to 10 kg</button>
+            <button onclick="selectWeight(this)">Up to 15 kg</button>
+            <button onclick="selectWeight(this)">Up to 20 kg</button>
+        </div>
+
+        <div class="hours-category">
+            <h3>Select Hours Range</h3>
+            <button onclick="selectHours(this)">1-2 hours</button>
+            <button onclick="selectHours(this)">2-4 hours</button>
+            <button onclick="selectHours(this)">4-8 hours</button>
+        </div>
+
+        <div class="form-section">
+            <label for="pickup-address">Pick Up Address</label>
+            <input type="text" id="pickup-address" placeholder="Street name & Locality Name">
+
+            <label for="mobile-number">10-digit Mobile</label>
+            <input type="text" id="mobile-number" placeholder="+91 --------">
+
+            <label for="additional-info">Additional Info</label>
+            <textarea id="additional-info" placeholder="Flat number, building name, street name, package details, etc." rows="4"></textarea>
+
+            <label for="delivery-address">Delivery Address</label>
+            <input type="text" id="delivery-address" placeholder="Street name & Locality Name">
+
+            <label for="delivery-info">Additional Delivery Info</label>
+            <textarea id="delivery-info" placeholder="Flat number, building name, street name, package details, etc." rows="4"></textarea>
+        </div>
+
+        <div class="pricing">
+            <h3>Delivery Pricing</h3>
+            <p>Base Price: ₹50</p>
+            <p>Additional charges may apply based on distance and weight.</p>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2024 Fastest Courier | <a href="#">Terms & Conditions</a> | <a href="#">Privacy Policy</a></p>
+    </div>
+    
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB5hQqDM6pyvucb2p0fasvBBiVLGnS6Uoc&libraries=places&callback=initAutocomplete" async defer></script>
+    <script>
+        let autocomplete;
+
+        function initAutocomplete() {
+            const input = document.getElementById("pickup-address");
+
+            // Create a new Autocomplete object and bind it to the input field
+            autocomplete = new google.maps.places.Autocomplete(input);
+
+            // Add a listener for when a user selects an address from the suggestions
+            autocomplete.addListener('place_changed', onPlaceChanged);
+        }
+
+        // Function to handle the selected address
+        function onPlaceChanged() {
+            const place = autocomplete.getPlace();
+
+            if (!place.geometry) {
+                console.log("No details available for input: " + place.name);
+                return;
+            }
+
+            // Optionally, log the place details
+            console.log("Selected address: ", place.formatted_address);
+            // You can extract additional details such as latitude, longitude, etc.
+            console.log("Latitude: " + place.geometry.location.lat());
+            console.log("Longitude: " + place.geometry.location.lng());
+        }
+    </script>
+    <script>
+        function selectOption(element) {
+            document.querySelectorAll('.option').forEach(option => option.classList.remove('active'));
+            element.classList.add('active');
+        }
+
+        function selectWeight(button) {
+            document.querySelectorAll('.weight-category button').forEach(btn => {
+                btn.style.backgroundColor = '';
+                btn.style.color = '';
+            });
+            button.style.backgroundColor = '#0078d7';
+            button.style.color = '#fff';
+        }
+
+        function selectHours(button) {
+            document.querySelectorAll('.hours-category button').forEach(btn => {
+                btn.style.backgroundColor = '';
+                btn.style.color = '';
+            });
+            button.style.backgroundColor = '#0078d7';
+            button.style.color = '#fff';
+        }
+
+        function toggleNavbar() {
+            const navbar = document.querySelector('.navbar');
+            navbar.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

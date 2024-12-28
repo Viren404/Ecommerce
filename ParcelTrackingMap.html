@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Route Direction Map</title>
+    <style>
+        #map {
+            height: 500px;
+            width: 100%;
+        }
+        #controls {
+            margin: 10px;
+        }
+        input {
+            margin: 5px 0;
+            padding: 8px;
+            width: calc(100% - 16px);
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Route Direction Map</h1>
+    <div id="controls">
+        <input type="text" id="pickup" placeholder="Enter pickup location" value="Bandra, Mumbai">
+        <input type="text" id="drop" placeholder="Enter drop location" value="Andheri, Mumbai">
+        <button id="start-direction">Start Direction</button>
+    </div>
+    <div id="map"></div>
+
+    <script>
+        let map;
+        let directionsService;
+        let directionsRenderer;
+        let markerPickup;
+        let markerDrop;
+        let intervalId;
+
+        function initMap() {
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: { lat: 19.076, lng: 72.8777 }, // Default to Mumbai, India
+                zoom: 12,
+            });
+
+            directionsService = new google.maps.DirectionsService();
+            directionsRenderer = new google.maps.DirectionsRenderer({ suppressMarkers: true });
+
+            directionsRenderer.setMap(map);
+
+            document.getElementById("start-direction").addEventListener("click", () => {
+                const pickup = document.getElementById("pickup").value;
+                const drop = document.getElementById("drop").value;
+
+                if (!pickup || !drop) {
+                    alert("Please enter both pickup and drop locations.");
+                    return;
+                }
+
+                calculateAndDisplayRoute(pickup, drop);
+            });
+        }
+
+        function calculateAndDisplayRoute(pickup, drop) {
+            directionsService.route(
+                {
+                    origin: pickup,
+                    destination: drop,
+                    travelMode: google.maps.TravelMode.DRIVING,
+                },
+                (response, status) => {
+                    if (status === google.maps.DirectionsStatus.OK) {
+                        directionsRenderer.setDirections(response);
+                        const leg = response.routes[0].legs[0];
+
+                        // Set custom markers
+                        setCustomMarkers(leg.start_location, leg.end_location);
+
+                        // Simulate movement
+                        simulateMovement(leg);
+                    } else {
+                        alert("Directions request failed due to " + status);
+                    }
+                }
+            );
+        }
+
+        function setCustomMarkers(start, end) {
+            if (markerPickup) markerPickup.setMap(null);
+            if (markerDrop) markerDrop.setMap(null);
+
+            markerPickup = new google.maps.Marker({
+                position: start,
+                map: map,
+                icon: {
+                    url: "https://maps.google.com/mapfiles/kml/shapes/parking_lot_maps.png",
+                    scaledSize: new google.maps.Size(40, 40),
+                },
+                title: "Pickup Location",
+            });
+
+            markerDrop = new google.maps.Marker({
+                position: end,
+                map: map,
+                icon: {
+                    url: "https://maps.google.com/mapfiles/kml/shapes/info-i_maps.png",
+                    scaledSize: new google.maps.Size(40, 40),
+                },
+                title: "Drop Location",
+            });
+        }
+
+        function simulateMovement(leg) {
+            if (intervalId) clearInterval(intervalId);
+
+            const path = leg.steps.flatMap(step => step.lat_lngs);
+            let index = 0;
+
+            const marker = new google.maps.Marker({
+                position: path[0],
+                map: map,
+                icon: {
+                    url: "https://maps.google.com/mapfiles/kml/shapes/cabs.png",
+                    scaledSize: new google.maps.Size(40, 40),
+                },
+                title: "Moving Vehicle",
+            });
+
+            intervalId = setInterval(() => {
+                if (index >= path.length) {
+                    clearInterval(intervalId);
+                    return;
+                }
+
+                marker.setPosition(path[index]);
+                map.panTo(path[index]);
+                index++;
+            }, 1000); // Update position every second
+        }
+    </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD9hWuvCcK-dFSlqLxhW4dVVwR0GXu_Pzk&callback=initMap" async defer></script>
+</body>
+</html>
+
+
+
+
+<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD9hWuvCcK-dFSlqLxhW4dVVwR0GXu_Pzk&callback=initMap" async defer></script> -->
+
+
+   
